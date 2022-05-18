@@ -1,7 +1,6 @@
-sudo apt-get update
-sudo apt-get install docker.io
-git clone https://github.com/Radziu1202/arrow.git
-docker build /arrow/arrowServer -t arrowserver:dev
-docker build /arrow/clientarrow -t arrowclient:dev
-docker run --rm -p 8815:8815 arrowserver:dev
-docker run --rm  arrowclient:dev
+docker build arrow-client -t arrow-client:dev
+docker build arrow-server -t arrow-server:dev
+docker build source-apache-arrow -t airbyte/source-apache-arrow:dev
+docker build destination-apache-arrow -t airbyte/destination-apache-arrow:dev
+docker run --rm -p 8815:8815 arrow-server:dev
+docker run --rm arrow-client:dev
