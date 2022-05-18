@@ -12,6 +12,7 @@ If the platform doesn't have one:
 sudo apt-get update
 sudo apt-get install docker.io
 sudo apt-get install python3.9
+sudo apt-get install pip3
 sudo pip3 install vitrualenv
 ``` 
 
@@ -23,10 +24,10 @@ virtualenv venv
 
 Building docker images:
 ```
-docker build arrow-client -t arrow-client:dev
-docker build arrow-server -t arrow-server:dev
-docker build source-apache-arrow -t airbyte/source-apache-arrow:dev
-docker build destination-apache-arrow -t airbyte/destination-apache-arrow:dev
+sudo docker build arrow-client -t arrow-client:dev
+sudo docker build arrow-server -t arrow-server:dev
+sudo docker build source-apache-arrow -t airbyte/source-apache-arrow:dev
+sudo docker build destination-apache-arrow -t airbyte/destination-apache-arrow:dev
 
 ```
 
