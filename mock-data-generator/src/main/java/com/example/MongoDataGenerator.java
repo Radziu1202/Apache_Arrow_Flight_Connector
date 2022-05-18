@@ -23,7 +23,7 @@ public class MongoDataGenerator {
     private static final int PORT = 27017;
     private static final String DATABASE = "arrow";
     private static final String COLLECTION = "arrow";
-    private static final int OBJECTS_NUMBER = 100;
+    private static final int OBJECTS_NUMBER = 10_000;
 
     public static void main(String[] args) {
         var dataGenerator = new DataGenerator();
@@ -43,5 +43,6 @@ public class MongoDataGenerator {
             MongoCollection<DataEntity> collection = database.getCollection(COLLECTION, DataEntity.class);
             collection.insertMany(dataEntities);
         }
+        System.out.println("Finish");
     }
 }

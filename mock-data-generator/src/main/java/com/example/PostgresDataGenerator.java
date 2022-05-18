@@ -9,7 +9,7 @@ public class PostgresDataGenerator {
     private static final String URL = "jdbc:postgresql://localhost:5432/arrow";
     private static final String USER = "arrow";
     private static final String PASSWORD = "mysecretpassword";
-    private static final int OBJECTS_NUMBER = 100;
+    private static final int OBJECTS_NUMBER = 10_000;
 
 
     public static void main(String[] args) {
@@ -38,5 +38,6 @@ public class PostgresDataGenerator {
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
+        System.out.println("Finish");
     }
 }

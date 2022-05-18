@@ -25,9 +25,15 @@ public class DataEntity {
 
         @Override
         public String toString() {
-            return "{\"longitude\": %s, \"latitude\": %s}"
+            return "\"{\"longitude\": %s, \"latitude\": %s}\""
                     .formatted(longitude, latitude);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "%d;%s;%s;%d;%s;%f;%s%n"
+                .formatted(id, firstName, lastName, age, phoneNumbers.toString(), income, houseLocation);
     }
 
 }
