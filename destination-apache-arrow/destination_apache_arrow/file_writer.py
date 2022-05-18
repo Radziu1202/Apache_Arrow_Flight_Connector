@@ -21,7 +21,7 @@ class DestinationApacheArrowFileWriter:
     schema_root: Schema
     field_type_map: dict[str, str]
     destination_writer: FlightStreamWriter
-    batch: dict
+    batch: list[dict]
 
     def __init__(self, config: DestinationApacheArrowConfig, configured_stream: ConfiguredAirbyteStream):
         self.chunk_size = config.get_chunk_size()
@@ -33,10 +33,10 @@ class DestinationApacheArrowFileWriter:
         upload_descriptor = FlightDescriptor.for_path(config.get_destination_path())
         self.destination_writer, _ = config.get_destination_server().do_put(upload_descriptor, self.schema_root)
 
-        self.batch = {}
+        self.batch = []
 
     def write(self, record_message: AirbyteRecordMessage):
-        self.batch[self.chunk_index] = self._extract_data(record_message.data)
+        self.batch.append(self._extract_data(record_message.data))
         self.chunk_index += 1
 
         if self.chunk_index == self.chunk_size:
@@ -104,7 +104,7 @@ class DestinationApacheArrowFileWriter:
     def _save_chunk(self):
         self.total_size += self.chunk_index
         logger.info(f'Filled chunk with {self.chunk_index} items; {self.total_size} items written')
-        self.destination_writer.write(RecordBatch.from_pydict(self.batch, schema=self.schema_root))
+        self.destination_writer.write(RecordBatch.from_pylist(self.batch, schema=self.schema_root))
         logger.info(f'Chunk written')
-        self.batch = {}
+        self.batch = []
         self.chunk_index = 0
