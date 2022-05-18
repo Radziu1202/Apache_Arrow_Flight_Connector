@@ -12,7 +12,7 @@ If the platform doesn't have one:
 sudo apt-get update
 sudo apt-get install docker.io
 sudo apt-get install python3.9
-sudo apt-get install pip3
+sudo apt-get install python3-pip
 sudo pip3 install vitrualenv
 ``` 
 
