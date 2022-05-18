@@ -11,8 +11,8 @@ public class S3DataGenerator {
     private static final String SECRET_KEY = "";
     private static final String BUCKET_NAME = "";
     private static final String S3_CATALOG = "arrow/";
-    private static final int OBJECTS_NUMBER = 10_000;
-    private static final int ROW_IN_FILE = 10;
+    private static final int OBJECTS_NUMBER = 100_000;
+    private static final int ROW_IN_FILE = 50;
 
     public static void main(String[] args) {
         var credentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
@@ -29,13 +29,14 @@ public class S3DataGenerator {
         for (var dataEntity : dataEntities) {
             if (i == 0) {
                 sb = new StringBuilder();
-                sb.append("id,firstName,lastName,age,phoneNumbers,income,houseLocation\n");
+                sb.append("id;firstName;lastName;age;phoneNumbers;income;houseLocation\n");
             }
             String csv = dataEntity.toString();
             sb.append(csv);
             i++;
             if (i == ROW_IN_FILE) {
-                s3client.putObject(BUCKET_NAME, S3_CATALOG + (dataEntity.getId() - ROW_IN_FILE), sb.toString());
+                s3client.putObject(BUCKET_NAME, S3_CATALOG + (dataEntity.getId() - ROW_IN_FILE + 1) + ".csv", sb.toString());
+		i=0;
             }
         }
         System.out.println("Finish");

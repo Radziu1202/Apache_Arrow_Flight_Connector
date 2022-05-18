@@ -15,14 +15,13 @@ from destination_apache_arrow.config import DestinationApacheArrowConfig
 
 
 class DestinationApacheArrowFileWriter:
-
     total_size: float
     chunk_size: int
     chunk_index: int
     schema_root: Schema
     field_type_map: dict[str, str]
     destination_writer: FlightStreamWriter
-    batch: DataFrame
+    batch: dict
 
     def __init__(self, config: DestinationApacheArrowConfig, configured_stream: ConfiguredAirbyteStream):
         self.chunk_size = config.get_chunk_size()
@@ -34,10 +33,10 @@ class DestinationApacheArrowFileWriter:
         upload_descriptor = FlightDescriptor.for_path(config.get_destination_path())
         self.destination_writer, _ = config.get_destination_server().do_put(upload_descriptor, self.schema_root)
 
-        self.batch = self._get_dataframe()
+        self.batch = {}
 
     def write(self, record_message: AirbyteRecordMessage):
-        self.batch = self.batch.append(self._extract_data(record_message.data), ignore_index=True)
+        self.batch[self.chunk_index] = self._extract_data(record_message.data)
         self.chunk_index += 1
 
         if self.chunk_index == self.chunk_size:
@@ -64,10 +63,7 @@ class DestinationApacheArrowFileWriter:
 
     @staticmethod
     def _extract_data(data: json) -> dict:
-        value_dict = {}
-        for (key, value) in data.items():
-            value_dict[key] = str(value)
-        return value_dict
+        return {key: str(value) for (key, value) in data.items()}
 
     @staticmethod
     def _get_field_type(data_type: str) -> DataType:
@@ -108,12 +104,7 @@ class DestinationApacheArrowFileWriter:
     def _save_chunk(self):
         self.total_size += self.chunk_index
         logger.info(f'Filled chunk with {self.chunk_index} items; {self.total_size} items written')
-        self.destination_writer.write(RecordBatch.from_pandas(self.batch, preserve_index=False, schema=self.schema_root))
+        self.destination_writer.write(RecordBatch.from_pydict(self.batch, schema=self.schema_root))
         logger.info(f'Chunk written')
-        self.batch = self.batch[0:0]
+        self.batch = {}
         self.chunk_index = 0
-
-    def _get_dataframe(self) -> DataFrame:
-        return DataFrame({column_name: DestinationApacheArrowFileWriter._get_dataframe_type(type) for (column_name, type) in self.field_type_map.items()}, index=[0])
-
-
