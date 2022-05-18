@@ -21,7 +21,7 @@ mvn clean install
 
 ## Run
 ```
-java -cp target/MockDataGenerator-1.0-SNAPSHOT.jar com.example.MongoDataGenerator
-java -cp target/MockDataGenerator-1.0-SNAPSHOT.jar com.example.PostgresDataGenerator
-java -cp target/MockDataGenerator-1.0-SNAPSHOT.jar com.example.S3DataGenerator 
+java -cp target/MockDataGenerator-1.0-SNAPSHOT-jar-with-dependencies.jar com.example.MongoDataGenerator
+java -cp target/MockDataGenerator-1.0-SNAPSHOT-jar-with-dependencies.jar com.example.PostgresDataGenerator
+java -cp target/MockDataGenerator-1.0-SNAPSHOT-jar-with-dependencies.jar com.example.S3DataGenerator 
 ```

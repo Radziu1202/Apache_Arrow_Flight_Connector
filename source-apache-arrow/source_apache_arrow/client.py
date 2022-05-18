@@ -74,7 +74,7 @@ class Client:
         return "string"
 
     def _stream_properties(self):
-        clientArrowFlight = pa.flight.connect("grpc://172.17.0.2:8815")
+        clientArrowFlight = pa.flight.connect("grpc://"+self.ipAddress+":8815")
         upload_descriptor = pa.flight.FlightDescriptor.for_path("uploaded.parquet")
 
         flight = clientArrowFlight.get_flight_info(upload_descriptor)

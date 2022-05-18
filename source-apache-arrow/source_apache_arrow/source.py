@@ -50,7 +50,7 @@ class SourceApacheArrow(Source):
         client = self._get_client(config)
         os.system("dir")
         try:
-            clientArrowFlight = pa.flight.connect("grpc://172.17.0.2:8815")
+            clientArrowFlight = pa.flight.connect("grpc://"+"0.0.0.0"+":8815")
             return AirbyteConnectionStatus(status=Status.SUCCEEDED);
 
         except Exception as err:

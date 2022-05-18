@@ -5,7 +5,7 @@ import pandas as pd
 
 df =pd.read_csv("green.csv")
 
-client = pa.flight.connect("grpc://172.17.0.2:8815")
+client = pa.flight.connect("grpc://0.0.0.0:8815")
 
 
 data_table = pa.Table.from_pandas(df)
