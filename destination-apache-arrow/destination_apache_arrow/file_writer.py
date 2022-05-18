@@ -7,7 +7,6 @@ import json
 from airbyte_cdk import logger
 from airbyte_cdk.entrypoint import logger
 from airbyte_cdk.models import AirbyteRecordMessage, ConfiguredAirbyteStream
-from pandas import DataFrame
 from pyarrow import DataType, Schema, bool_, float64, schema, utf8, RecordBatch
 from pyarrow._flight import FlightDescriptor, FlightStreamWriter
 
