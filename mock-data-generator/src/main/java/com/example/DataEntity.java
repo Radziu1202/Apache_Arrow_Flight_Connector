@@ -25,15 +25,19 @@ public class DataEntity {
 
         @Override
         public String toString() {
-            return "\"{\"longitude\": %s, \"latitude\": %s}\""
+            return "{\"longitude\": %f, \"latitude\": %f}"
+                    .formatted(longitude, latitude);
+        }
+
+        public String toCSV() {
+            return "\"{\"\"longitude\"\": %f, \"\"latitude\"\": %f}\""
                     .formatted(longitude, latitude);
         }
     }
 
-    @Override
-    public String toString() {
-        return "%d;%s;%s;%d;%s;%f;%s%n"
-                .formatted(id, firstName, lastName, age, phoneNumbers.toString(), income, houseLocation);
+    public String toCSV() {
+        return "%d,%s,%s,%d,\"%s\",%f,%s%n"
+                .formatted(id, firstName, lastName, age, phoneNumbers, income, houseLocation.toCSV());
     }
 
 }
