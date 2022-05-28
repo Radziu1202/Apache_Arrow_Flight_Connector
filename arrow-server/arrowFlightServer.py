@@ -14,7 +14,7 @@ class FlightServer(pa.flight.FlightServerBase):
 		self._location = location
 		self._repo = repo
 
-		self.dataset= pa.array(self.generate_data())
+		self.dataset= pa.Table.from_pylist(self.generate_data())
 		
 		
 	def generate_data(self):

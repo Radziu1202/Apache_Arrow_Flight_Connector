@@ -74,18 +74,9 @@ class Client:
         return "string"
 
     def _stream_properties(self):
-        clientArrowFlight = pa.flight.connect("grpc://"+self.ipAddress+":8815")
-        upload_descriptor = pa.flight.FlightDescriptor.for_path("uploaded.parquet")
-
-        flight = clientArrowFlight.get_flight_info(upload_descriptor)
-        reader = clientArrowFlight.do_get(flight.endpoints[0].ticket)
-        read_table = reader.read_all()
-        df = read_table.to_pandas()
-        fields = {}
-        for col in df.columns:  # works if there is only one DATAFRAME, otherwise we need to add another for loop
-            fields[col] = self.dtype_to_json_type(df[col].dtype)
-        return {field: {"type": [fields[field], "null"]} for field in fields}
-
+      
+        return {"id": {"type":["number","null"]},   "first_name":{"type":["string","null"]}, "last_name":{"type":["string","null"]}, "ph_no":{"type":["string","null"]}, "age": {"type":["number","null"]}, "income": {"type":["number","null"]}, "house_location":{"type":["string","null"]} }       
+    
     @property
     def streams(self) -> Iterable:
         """Discovers available streams"""
