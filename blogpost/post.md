@@ -1,23 +1,13 @@
 # The way of creating batch can make a difference
 
 ## Introduction
-During working with data in most cases we focus on minimizing time spend on I/O operation.
-One of the most common ways to reduce the number of write operation is using batches.
-We want to gather some data chunk and then send them as one operation.
-However, we should never forget about trying to optimize also a process of creating the batch.
-In this post, we would like to show a small tip which enable us to avoid problem working with PyArrow
+While working with data we mostly focus on minimizing the time spent on I/O operations. One of the most common ways of reducing the number of write operations is by using batches. We want to gather some data chunks and then send them as one operation. However, we should never forget about trying to optimize the process of batch creation too. In this post, we would like to show a small tip which enabled us to avoid this problem while working with PyArrow
 
 ## PyArrow
-PyArrow is an implementation of Apache Arrow library for Python.
-It enables, for example, sending data to Arrow Flight Server.
-However, before sending data, they should be prepared by creating `RecordBatch` object.
-`RecordBatch` can be created from many types of objects, for example, Pandas Dataframes or list of dictionaries.
-Nevertheless, we do not have always data as Dataframes or list of dictionaries.
-For this reason, we need prepare our data firstly and doing it in optimal way can have a great impact on performance.
+PyArrow is an implementation of Apache Arrow library for Python, it enables sending data to Arrow Flight Server among other things. Before sending, the data should be prepared by creating a `RecordBatch` object. `RecordBatch` can be created from many types of objects, for example, Pandas Dataframes or list of dictionaries. However, we do not always have data in the format of Dataframes or list of dictionaries. For this reason, firstly we need to prepare our data and doing so in the optimal way can have a great impact on performance.
 
 ## Preparing data
-First, let's generate some test data. 
-The data will be initially stored as Python dictionary
+First, let's generate some test data. The data will be initially stored as Python dictionary
 ```python
 data_collection = []
 
@@ -29,7 +19,7 @@ for i in range(100_000):
     })
 ```
 
-The next step is preparing Arrow schema to enable PyArrow correct work
+The next step is preparing Arrow schema to ensure PyArrow correct work
 ```python
 schema_root = schema([
         ('id', int64()),
@@ -39,9 +29,7 @@ schema_root = schema([
 ```
 
 ## Tests
-Let's assume that we want to send our data in batches of size equals to 10 000 objects.
-Firstly we will use Pandas Dataframe.
-Then we will use list of dictionaries and compare results
+Let's assume that we want to send our data in batches of size equal to 10 000 objects. Firstly, we will use Pandas Dataframe, then we will use list of dictionaries and compare the results
 
 ### Using Dataframe from Pandas
 ```python
@@ -60,7 +48,7 @@ for data in data_collection:
     end = time.time()
 ```
 
-The average time of executing this code 10 times is equals to 157,4s
+The average time of executing this code 10 times is equal to 157,4s
 
 ### Using list of dictionaries
 ```python
@@ -75,11 +63,8 @@ for data in data_collection:
 end = time.time()
 ```
 
-The average time of executing this code 10 times is equals to 0.133s 
+The average time of executing this code 10 times is equal to 0.133s 
 
 
 ## Conclusions
-The result obtained using only list of dictionaries is much better than using Dataframes.
-Adding new data to dataframe using `append` method is really time-consuming and in consequence creating batches is much more expensive.
-Probably this is the reason why this method is deprecated from Pandas 1.4.0 and will be removed in the future.
-
+The result obtained by using only the list of dictionaries is much better than while using Dataframes. Adding new data to the dataframe using `append` method is really time-consuming and in consequence creating batches is much more expensive. Probably this is the reason why this method is deprecated since Pandas 1.4.0 and will be removed in the future.
